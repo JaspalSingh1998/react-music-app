@@ -25,8 +25,8 @@ const Player = ({ currentSong, isPlaying, setIsPlaying }) => {
   });
 
   function timeUpdateHandler(e) {
-    const currentTime = getTime(e.target.currentTime);
-    const duration = getTime(e.target.duration);
+    const currentTime = e.target.currentTime;
+    const duration = e.target.duration;
     setSongInfo({ ...songInfo, currentTime, duration });
   }
   function getTime(time) {
@@ -37,9 +37,14 @@ const Player = ({ currentSong, isPlaying, setIsPlaying }) => {
   return (
     <div className="player">
       <div className="time-control">
-        <p>{songInfo.currentTime}</p>
-        <input type="range" />
-        <p>{songInfo.duration}</p>
+        <p>{getTime(songInfo.currentTime)}</p>
+        <input
+          type="range"
+          min={0}
+          max={songInfo.duration}
+          value={songInfo.currentTime}
+        />
+        <p>{getTime(songInfo.duration)}</p>
       </div>
       <div className="play-control">
         <FontAwesomeIcon size="2x" icon={faAngleLeft} />
