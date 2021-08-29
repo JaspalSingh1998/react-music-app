@@ -3,14 +3,21 @@ import { useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPlay,
+  faPause,
   faAngleRight,
   faAngleLeft,
 } from "@fortawesome/free-solid-svg-icons";
 
-const Player = ({ currentSong }) => {
+const Player = ({ currentSong, isPlaying, setIsPlaying }) => {
   const audioRef = useRef(null);
   function playSongHandler() {
-    audioRef.current.play();
+    if (isPlaying) {
+      audioRef.current.pause();
+      setIsPlaying(!isPlaying);
+    } else {
+      audioRef.current.play();
+      setIsPlaying(!isPlaying);
+    }
   }
   return (
     <div className="player">
@@ -21,7 +28,11 @@ const Player = ({ currentSong }) => {
       </div>
       <div className="play-control">
         <FontAwesomeIcon size="2x" icon={faAngleLeft} />
-        <FontAwesomeIcon onClick={playSongHandler} size="2x" icon={faPlay} />
+        <FontAwesomeIcon
+          onClick={playSongHandler}
+          size="2x"
+          icon={isPlaying ? faPause : faPlay}
+        />
         <FontAwesomeIcon size="2x" icon={faAngleRight} />
       </div>
       <audio src={currentSong.audio} ref={audioRef}></audio>
