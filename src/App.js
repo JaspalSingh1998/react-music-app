@@ -8,6 +8,7 @@ import Nav from "./components/Nav";
 import "./styles/app.scss";
 
 import data from "./data.js";
+import { playAudio } from "./util.js";
 
 function App() {
   const audioRef = useRef(null);
@@ -32,6 +33,12 @@ function App() {
     );
     setSongInfo({ ...songInfo, currentTime, duration, animationPercentage });
   }
+  const songEndHandler = async () => {
+    let currentIndex = songs.findIndex((song) => song.id === currentSong.id);
+    await setCurrentSong(songs[(currentIndex + 1) % songs.length]);
+    playAudio(isPlaying, audioRef);
+    return;
+  };
   return (
     <div className="App">
       <Nav setLibraryStatus={setLibraryStatus} libraryStatus={libraryStatus} />
@@ -60,6 +67,7 @@ function App() {
         onLoadedMetadata={timeUpdateHandler}
         src={currentSong.audio}
         ref={audioRef}
+        onEnded={songEndHandler}
       ></audio>
     </div>
   );
